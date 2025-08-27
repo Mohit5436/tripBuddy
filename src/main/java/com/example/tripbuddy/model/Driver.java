@@ -1,11 +1,9 @@
 package com.example.tripbuddy.model;
 
 
+import com.example.tripbuddy.Enum.Gender;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Driver {
 
     @Id
@@ -22,7 +21,12 @@ public class Driver {
     private int driverId;
     private String name;
     private int age;
+
+    @Column(unique = true, nullable = false)
     private String emailId;
+
+    @Enumerated(value = EnumType.STRING)
+    Gender gender;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="driver_id")
