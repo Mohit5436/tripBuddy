@@ -33,7 +33,7 @@ public class Driver {
     List<Booking> bookings = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="cad_id")
+    @JoinColumn(name="cab_id")
     Cab cab;
 }
 
