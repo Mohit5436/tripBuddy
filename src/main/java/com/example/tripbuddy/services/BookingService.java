@@ -17,9 +17,11 @@ import com.example.tripbuddy.repository.CustomerRepository;
 import com.example.tripbuddy.repository.DriverRepository;
 import com.example.tripbuddy.transformer.BookingTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
+
 import java.util.Optional;
 
 @Service
@@ -36,6 +38,9 @@ public class BookingService {
 
     @Autowired
     BookingRepository bookingRepository;
+
+    @Autowired
+    JavaMailSender emailSender;
 
 
 
@@ -74,6 +79,8 @@ public class BookingService {
 
     }
 
+
+
     public BookingResponse completeTrip(int bookingId) {
         // Check weather the booking id is legit or not
         Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
@@ -86,6 +93,21 @@ public class BookingService {
         Driver driver = bookingRepository.getDriverFromBookingID(bookingId);
         Cab cab = driver.getCab();
         cab.setAvailable(true);
+        //uncomment when want to use
+        //sendEmail(customer);
         return BookingTransformer.bookingToBookingResponse(completedBooking, customer, cab, driver);
+    }
+
+    private void sendEmail(Customer customer) {
+
+        String text =customer.getName()+ "Your ride is complete. Hope you enjoyed with us. \n you will get invoice with this mail. \n  See you again...";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        //add mail address used in application.properties
+        message.setFrom("r*********@gmail.com");
+        message.setTo(customer.getEmailId());
+        message.setSubject("Trip Complete");
+        message.setText(text);
+        emailSender.send(message);
     }
 }

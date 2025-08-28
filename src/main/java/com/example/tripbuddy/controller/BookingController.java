@@ -20,7 +20,7 @@ public class BookingController {
         return bookingService.bookCab(bookingRequest, customerId);
     }
 
-    @PutMapping("/book/booking/{bookingId}")
+    @PutMapping("/complete/booking/{bookingId}")
     public BookingResponse completeTrip(@PathVariable("bookingId") int bookingId){
         return bookingService.completeTrip(bookingId);
     }
